@@ -50,16 +50,23 @@ cmp.setup({
 })
 ```
 
+TESTING
+=======
+Copy paste the comments into a /tmp/x.y file
+Open editor, use completion and check that all N[x] identifiers were found
 
-TODO:
+ROADMAP
+=======
+[ ] add test suite and extract the sample files into files so that testing is easier
 
-ROADMAP:
-===========
 
+IDEAS FOR FUTURE
+=================
 Ues treesitter instead?
-Eg see https://github.com/ray-x/cmp-treesitter
+  Eg see https://github.com/ray-x/cmp-treesitter
+  See https://github.com/ray-x/cmp-treesitter/issues/14
+  Preserving order is missing to get same usefulness
 
-add test suite
 
 Eventually use parser rather than regex cause they are ery limited in lua (yet
 seems to get the job done reasonably well to be useful for the languages above)
