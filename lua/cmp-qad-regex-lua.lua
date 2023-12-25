@@ -11,7 +11,7 @@ local function lua_find_keywords(codeLines)
   --    local n4 = "abc"
   -- }
   local patterns = {
-    ["function_name_and_args"] = "function%s+([%w_]+)%s*%(([^)]+)%)",
+    ["function_name_and_args"] = "function%s+([%w_.:]+)%s*%(([^)]+)%)",
     ["local_var"] = "local%s+([%w_]+)%s*=",
     ["for_assign"] = "for%s*([%w_]+),%s*([%w_]+)%s*in"
   }
@@ -24,10 +24,10 @@ local function lua_find_keywords(codeLines)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
-          for i in string.gmatch(match, "[^ ,]+") do
-            if not seen[i] then
-              seen[i] = true
-              table.insert(result, { textEditText = i, cmp = { kind_text ="lua_local_keyword" }, label = string.sub(i, 1, 999) })
+          for m in string.gmatch(match, "[^ ,]+") do
+            if not seen[m] then
+              seen[m] = true
+              table.insert(result, { textEditText = m, cmp = { kind_text ="lua_local_keyword " .. i }, label = string.sub(m, 1, 999), priority = i })
             end
           end
         end

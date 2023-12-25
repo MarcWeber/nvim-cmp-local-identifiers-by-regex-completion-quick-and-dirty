@@ -27,7 +27,7 @@ local function php_find_keywords(codeLines)
     ["in_list"] = "list%(([^)]+)%)",
     ["foreachkv"] = "as%s+($[%w_]+)%s+=>%s+($[%w_]+)",
     ["foreachv"] = "as%s+($[%w_]+)",
-    ["function_name_and_args"] = "function%s+([%w_]+)%s*%(([^)]+)%)",
+    ["function_name_and_args"] = "function%s+([%w_.]+)%s*%(([^)]+)%)",
     ["function_no_name_args"] = "function%s*%(([^)]+)%)",
     ["constructor_args"] = "__construct%s*%(([^)]+)%)",
     ["fn"] = "fn%((%$[%w_]+)%)",
@@ -38,10 +38,10 @@ local function php_find_keywords(codeLines)
   }
   local result = {}
   local seen = {}
-  local function add(i, sub)
+  local function add(i, sub, line)
     if not seen[i] then
       seen[i] = true
-      table.insert(result, { textEditText = i,  cmp = { kind_text ="php_local_keyword" }, label = string.sub(i, sub,  999) })
+      table.insert(result, { textEditText = i,  cmp = { kind_text ="php_local_keyword " .. line }, label = string.sub(i, sub,  999) })
     end
   end
   for i = #codeLines, 1, -1 do
@@ -51,15 +51,15 @@ local function php_find_keywords(codeLines)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
-          for i in string.gmatch(match, "[^ ,]+") do
-            if string.sub(i, 1, 1) == '&' then
-              i = string.sub(i, 2)
+          for m in string.gmatch(match, "[^ ,]+") do
+            if string.sub(m, 1, 1) == '&' then
+              m = string.sub(m, 2)
             end
-            if string.sub(i, 1, 3) == '...' then -- ...$args case
-              add(string.sub(i, 4), 1)
-              add(i, 0)
+            if string.sub(m, 1, 3) == '...' then -- ...$args case
+              add(string.sub(m, 4), 1, i)
+              add(m, 0, i)
             else
-              add(i, 1)
+              add(m, 1, i)
             end
           end
         end

@@ -30,10 +30,10 @@ local function ruby_find_keywords(codeLines)
   }
   local result = {}
   local seen = {}
-  local function add(i, label)
-    if not seen[i] then
-      seen[i] = true
-      table.insert(result, { insertText = i, textEditText = i,  kind="php_local_keyword", label = label })
+  local function add(m, label, i)
+    if not seen[m] then
+      seen[m] = true
+      table.insert(result, { insertText = m, textEditText = m,  kind="php_local_keyword " .. i, label = label })
     end
   end
   for i = #codeLines, 1, -1 do
@@ -43,15 +43,15 @@ local function ruby_find_keywords(codeLines)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
-          for i in string.gmatch(match, "[^ ,]+") do
-            i = string.gsub(i, "[({})]", "")
-            if not seen[i] and not (i == "=>" ) and not (i == "as") and not (i == "*") then
-              local i_no_colon = i:gsub("^:", "")
-              i_no_colon = i:gsub("^$", "")
-              i_no_colon = i:gsub("^@", "")
-              i_no_colon = i:gsub("^@", "")
-              add(i, i_no_colon)
-              add(i, i)
+          for m in string.gmatch(match, "[^ ,]+") do
+            m = string.gsub(m, "[({})]", "")
+            if not seen[m] and not (m == "=>" ) and not (m == "as") and not (m == "*") then
+              local i_no_colon = m:gsub("^:", "")
+              i_no_colon = m:gsub("^$", "")
+              i_no_colon = m:gsub("^@", "")
+              i_no_colon = m:gsub("^@", "")
+              add(m, i_no_colon, i)
+              add(m, m, i)
             end
           end
         end

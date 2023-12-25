@@ -24,10 +24,10 @@ local function python_find_keywords(codeLines)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
-          for i in string.gmatch(match, "[^ ,]+") do
-            if not seen[i] then
-              seen[i] = true
-              table.insert(result, { textEditText = i,  cmp = { kind_text ="python_local_keyword" }, label = string.sub(i, 1, 999) })
+          for m in string.gmatch(match, "[^ ,]+") do
+            if not seen[m] then
+              seen[m] = true
+              table.insert(result, { textEditText = m,  cmp = { kind_text ="python_local_keyword " .. i }, label = string.sub(m, 1, 999) })
             end
           end
         end

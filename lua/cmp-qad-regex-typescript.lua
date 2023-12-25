@@ -49,12 +49,12 @@ local function typescript_find_keywords(codeLines)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
-          for i in string.gmatch(match, "[^ ,]+") do
-            i = string.gsub(i, "[({}):]", "")
+          for m in string.gmatch(match, "[^ ,]+") do
+            m = string.gsub(m, "[({}):]", "")
 
-            if not seen[i] and not (i == "=>" ) and not (i == "as") and not (i == "*") then
-              seen[i] = true
-              table.insert(result, { textEditText = i, cmp { kind_text ="typescript_local_keyword" }, label = string.sub(i, 1, 999) })
+            if not seen[m] and not (m == "=>" ) and not (m == "as") and not (m == "*") then
+              seen[m] = true
+              table.insert(result, { textEditText = m, cmp { kind_text ="typescript_local_keyword" .. i }, label = string.sub(m, 1, 999) })
             end
           end
         end
