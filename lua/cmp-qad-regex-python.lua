@@ -1,15 +1,19 @@
-local pythonlocalkeywords = {}
-function pythonlocalkeywords:is_available()
+local M = {}
+function M:is_available()
   return vim.bo.filetype == "python"
 end
-function pythonlocalkeywords:get_keyword_pattern()
+function M:get_keyword_pattern()
   return [[\k\+]]
 end
-local function python_find_keywords(codeLines)
-  -- def foobar():
-  -- abc = "abc"
-  -- ccc, ddd = zooor
-  -- for aaa, bbb in zoo:
+M.test_doc = [[
+  def foobar():
+  abc = "abc"
+  ccc, ddd = zooor
+  for aaa, bbb in zoo:
+]]
+M.expected = { }
+
+function M:find_keywords(codeLines)
   local patterns = {
     ["for_x_in"] = "for%s+([%w_,%s]+)%s+in", -- .* for cases like $abc['foo'][] = 8;
     ["assignment"] = "([%w_,%s]+)=%s*",
@@ -36,10 +40,10 @@ local function python_find_keywords(codeLines)
   end
   return result
 end
-function pythonlocalkeywords:complete(params, callback)
+function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = python_find_keywords(lines)
+  found = find_keywords(lines)
   callback(found)
 end
-return pythonlocalkeywords
+return M

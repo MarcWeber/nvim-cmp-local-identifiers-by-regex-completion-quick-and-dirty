@@ -1,19 +1,23 @@
-local vimllocalkeywords = {}
-function vimllocalkeywords:is_available()
+local M = {}
+function M:is_available()
   return vim.bo.filetype == "vim"
 end
-function vimllocalkeywords:get_keyword_pattern()
+function M:get_keyword_pattern()
   return [[\k\+]]
 end
-local function viml_find_keywords(codeLines)
-  -- let g:abc
-  -- let s:abc
-  -- fun n1(n2, n3)
-  --    let n4 = "abc"
-  -- endf
-  -- fun n6()
-  --    let n4 = "abc"
-  -- endf
+M.test_doc = [[
+  let g:abc
+  let s:abc
+  fun n1(n2, n3)
+     let n4 = "abc"
+  endf
+  fun n6()
+     let n4 = "abc"
+  endf
+]]
+M.expected = { }
+
+function M:find_keywords(codeLines)
   local patterns = {
     -- TODO
     ["function_name_and_args"] = "fun%s+([%w_:]+)%s*%(([^)]+)%)",
@@ -40,10 +44,10 @@ local function viml_find_keywords(codeLines)
   end
   return result
 end
-function vimllocalkeywords:complete(params, callback)
+function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = viml_find_keywords(lines)
+  found = find_keywords(lines)
   callback(found)
 end
-return vimllocalkeywords
+return M

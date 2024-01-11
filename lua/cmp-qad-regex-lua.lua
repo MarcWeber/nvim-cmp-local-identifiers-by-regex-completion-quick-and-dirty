@@ -1,15 +1,19 @@
-local lualocalkeywords = {}
-function lualocalkeywords:is_available()
+local M = {}
+function M:is_available()
   return vim.bo.filetype == "lua"
 end
-function lualocalkeywords:get_keyword_pattern()
+function M:get_keyword_pattern()
   return [[\k\+]]
 end
-local function lua_find_keywords(codeLines)
-  -- test file
-  -- function n1(n2, n3){
-  --    local n4 = "abc"
-  -- }
+
+M.test_doc = [[
+  test file
+  function n1(n2, n3){
+     local n4 = "abc"
+  }
+]]
+
+function M:find_keywords(codeLines)
   local patterns = {
     ["function_name_and_args"] = "function%s+([%w_.:]+)%s*%(([^)]+)%)",
     ["local_var"] = "local%s+([%w_]+)%s*=",
@@ -36,10 +40,10 @@ local function lua_find_keywords(codeLines)
   end
   return result
 end
-function lualocalkeywords:complete(params, callback)
+function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = lua_find_keywords(lines)
+  found = M:find_keywords(lines)
   callback(found)
 end
-return lualocalkeywords
+return M

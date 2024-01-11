@@ -1,25 +1,30 @@
-local javascriptlocalkeywords = {}
-function javascriptlocalkeywords:is_available()
+local M = {}
+function M:is_available()
   return vim.bo.filetype == "javascript"
 end
-function javascriptlocalkeywords:get_keyword_pattern()
+function M:get_keyword_pattern()
   return [[\k\+]]
 end
-local function javascript_find_keywords(codeLines)
-  -- const N1 = 7
-  -- const [N3, N2] = [1,2]
-  -- const {N4, N5} = 7
-  -- let N6 = 7
-  -- var N7 = 7
-  -- const N8 = 7
-  -- (N9) => ..
-  -- (N10: Array<Number>) => ..
-  -- function(N17: Array<Number>) => ..
-  -- for (let N11 of [2])
-  -- for (let N12 in {"a": 20})
-  -- import {N15,N16} from ..
-  -- import * as N13 from ..
-  -- import * as N14 from ..
+
+M.test_doc = [[
+  const N1 = 7
+  const [N3, N2] = [1,2]
+  const {N4, N5} = 7
+  let N6 = 7
+  var N7 = 7
+  const N8 = 7
+  (N9) => ..
+  (N10: Array<Number>) => ..
+  function(N17: Array<Number>) => ..
+  for (let N11 of [2])
+  for (let N12 in {"a": 20})
+  import {N15,N16} from ..
+  import * as N13 from ..
+  import * as N14 from ..
+]]
+M.expected = { }
+
+function M:find_keywords(codeLines)
   local patterns = {
     ["assignment_keyword_const"] = "const%s+([%w_]+)%s+=", -- .* for cases like $abc['foo'][] = 8;
     ["assignment_keyword_var"] = "var%s+([%w_]+)%s+=", -- .* for cases like $abc['foo'][] = 8;
@@ -63,10 +68,10 @@ local function javascript_find_keywords(codeLines)
   end
   return result
 end
-function javascriptlocalkeywords:complete(params, callback)
+function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = javascript_find_keywords(lines)
+  found = M:find_keywords(lines)
   callback(found)
 end
-return javascriptlocalkeywords
+return M

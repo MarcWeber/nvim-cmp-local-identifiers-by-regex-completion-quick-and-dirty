@@ -1,24 +1,27 @@
-local phplocalkeywords = {}
-function phplocalkeywords:is_available()
+local M = {}
+function M:is_available()
   return vim.bo.filetype == "php"
 end
-function phplocalkeywords:get_keyword_pattern()
+function M:get_keyword_pattern()
   return [[\k\+]]
 end
-local function php_find_keywords(codeLines)
-  -- test file
-  -- function n1(){
-  -- }
-  -- function ($n2, $$n3, $n4)use(&$n5, $n6){
-  --   if ($n12 = "abc"){ }
-  --   $n13[foo()] = 20;
-  --   static $n7, $n8;
-  --   $n9 = "abc";
-  -- };
-  -- try {
-  -- } catch (Exception $n10){
-  -- }
-  -- preg_match("/foo/", $bar, $n11);  // if pattern or string is function call this fails R695106136 hard to match if you use function calls or such maybe extend with treesitter or such ? but might catch many cases
+M.test_doc = [[
+  test file
+  function n1(){
+  }
+  function ($n2, $$n3, $n4)use(&$n5, $n6){
+    if ($n12 = "abc"){ }
+    $n13[foo()] = 20;
+    static $n7, $n8;
+    $n9 = "abc";
+  };
+  try {
+  } catch (Exception $n10){
+  }
+  preg_match("/foo/", $bar, $n11);  // if pattern or string is function call this fails R695106136 hard to match if you use function calls or such maybe extend with treesitter or such ? but might catch many cases
+]]
+M.expected = { }
+function M:find_keywords(codeLines)
   local patterns = {
     ["var_assignment"] = "($[%w_]+)%[.*=", -- .* for cases like $abc['foo'][] = 8;
     ["expr_assignment"] = "($[%w_]+)%s+= ", -- if ($x = true){.. x is defined)
@@ -68,11 +71,10 @@ local function php_find_keywords(codeLines)
   end
   return result
 end
-function phplocalkeywords:complete(params, callback)
+function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = php_find_keywords(lines)
+  found = M:find_keywords(lines)
   callback(found)
 end
-print("returning phplocalkeywords")
-return phplocalkeywords
+return M
