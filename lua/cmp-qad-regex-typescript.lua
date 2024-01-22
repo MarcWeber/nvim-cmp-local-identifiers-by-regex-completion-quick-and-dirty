@@ -33,6 +33,7 @@ function M:find_keywords(codeLines)
     ["assignment_list_let"] = "let%s+%[([^%]]+)%]", -- .* for cases like $abc['foo'][] = 8;
     ["assignment_dict_const"] = "const%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
     ["assignment_dict_var"] = "var%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
+    ["type"] = "type%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
     -- ["assignment_dict_let"] = "let%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
     -- ["lambda_args"] = "%([^%)]+%)%s*=>", -- .* for cases like $abc['foo'][] = 8;
     -- ["function_args"] = "function%([^%)]+%)", -- .* for cases like $abc['foo'][] = 8;
@@ -70,7 +71,7 @@ end
 function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = find_keywords(lines)
+  found = M:find_keywords(lines)
   callback(found)
 end
 

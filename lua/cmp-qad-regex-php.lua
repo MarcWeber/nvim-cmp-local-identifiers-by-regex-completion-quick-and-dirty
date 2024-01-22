@@ -30,7 +30,8 @@ function M:find_keywords(codeLines)
     ["in_list"] = "list%(([^)]+)%)",
     ["foreachkv"] = "as%s+($[%w_]+)%s+=>%s+($[%w_]+)",
     ["foreachv"] = "as%s+($[%w_]+)",
-    ["function_name_and_args"] = "function%s+([%w_.]+)%s*%(([^)]+)%)",
+    ["function_name"] = "function%s+([%w_.]+)%s*%(",
+    ["function_and_args"] = "function%s+[%w_.]+%s*%(([^)]+)%)", -- args more important than function name cause you're more likely to use arguments than the name within the function
     ["function_no_name_args"] = "function%s*%(([^)]+)%)",
     ["constructor_args"] = "__construct%s*%(([^)]+)%)",
     ["fn"] = "fn%((%$[%w_]+)%)",

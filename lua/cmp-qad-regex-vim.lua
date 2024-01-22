@@ -47,7 +47,7 @@ end
 function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = find_keywords(lines)
+  found = M:find_keywords(lines)
   callback(found)
 end
 return M

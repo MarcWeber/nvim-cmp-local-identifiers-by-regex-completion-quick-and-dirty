@@ -6,10 +6,11 @@ function M:get_keyword_pattern()
   return [[\k\+]]
 end
 M.test_doc = [[
-  def foobar():
+  def foobar(folder):
   abc = "abc"
   ccc, ddd = zooor
   for aaa, bbb in zoo:
+  class SimpleKeyValueStoragePickle:
 ]]
 M.expected = { }
 
@@ -17,7 +18,8 @@ function M:find_keywords(codeLines)
   local patterns = {
     ["for_x_in"] = "for%s+([%w_,%s]+)%s+in", -- .* for cases like $abc['foo'][] = 8;
     ["assignment"] = "([%w_,%s]+)=%s*",
-    ["def"] = "def%s+([%w_]+)%(",
+    ["def"] = "def%s+([%w_]+)%(([%w_,%s]+)%)",
+    ["class"] = "class%s+([%w_]+)",
   }
   local result = {}
   local seen = {}
@@ -43,7 +45,7 @@ end
 function M:complete(params, callback)
   line = params.context.cursor.line
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = find_keywords(lines)
+  found = M:find_keywords(lines)
   callback(found)
 end
 return M
