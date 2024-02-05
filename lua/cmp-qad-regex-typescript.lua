@@ -52,7 +52,6 @@ function M:find_keywords(codeLines)
     -- for i = 1, #codeLines1, 1 do
     local line = codeLines[i]
     for patternDesc, pattern in pairs(patterns) do
-      print(line)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
