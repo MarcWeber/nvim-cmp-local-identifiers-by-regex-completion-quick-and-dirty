@@ -1,7 +1,8 @@
 -- TODO enable tests for all languages
 -- local qd_langs = {"lua", "python", "ruby", "vim", "php", "javascript", "typescript"}
 -- local qd_langs = {"python"}
-local qd_langs = {"javascript"}
+-- local qd_langs = {"javascript"}
+local qd_langs = {"php"}
 
 local function iterator_to_array(...)
   local arr = {}

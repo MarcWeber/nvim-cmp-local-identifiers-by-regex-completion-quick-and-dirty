@@ -7,6 +7,10 @@ function M:get_keyword_pattern()
 end
 M.test_doc = [[
   test file
+  class CL {
+  }
+  trait TR {
+  }
   function n1(){
   }
   function ($n2, $$n3, $n4)use(&$n5, $n6){
@@ -22,7 +26,10 @@ M.test_doc = [[
 ]]
 M.expected = { }
 function M:find_keywords(codeLines)
+
   local patterns = {
+    ["trait"] = "trait%s+([%w_]+)",
+    ["class"] = "class%s+([%w_]+)",
     ["var_assignment"] = "($[%w_]+)%[.*=", -- .* for cases like $abc['foo'][] = 8;
     ["expr_assignment"] = "($[%w_]+)%s+= ", -- if ($x = true){.. x is defined)
     ["global"] = "global ([^;]+)",

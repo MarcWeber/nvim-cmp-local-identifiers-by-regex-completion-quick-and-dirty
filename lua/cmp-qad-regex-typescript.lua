@@ -20,6 +20,7 @@ M.test_doc = [[
   import {N15,N16} from ..
   import * as N13 from ..
   import * as N14 from ..
+  for (let command of dwc.commands) {
 ]]
 M.expected = { }
 
@@ -34,16 +35,16 @@ function M:find_keywords(codeLines)
     ["assignment_dict_const"] = "const%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
     ["assignment_dict_var"] = "var%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
     ["type"] = "type%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["assignment_dict_let"] = "let%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
-    -- ["lambda_args"] = "%([^%)]+%)%s*=>", -- .* for cases like $abc['foo'][] = 8;
-    -- ["function_args"] = "function%([^%)]+%)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["assignment_list_const"] = "const%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["assignment_list_var"] = "var%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["assignment_list_let"] = "let%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["for_var"] = "for%s*%(var%s+(([^)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["for_const"] = "for%s*%(const%s+(([^)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["for_let"] = "for%s*%(let%s+(([^)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
-    -- ["import"] = "import%s+(.*)%sfrom", -- .* for cases like $abc['foo'][] = 8;
+    ["assignment_dict_let"] = "let%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
+    ["lambda_args"] = "%([^%)]+%)%s*=>", -- .* for cases like $abc['foo'][] = 8;
+    ["function_args"] = "function%([^%)]+%)", -- .* for cases like $abc['foo'][] = 8;
+    ["assignment_list_const"] = "const%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
+    ["assignment_list_var"] = "var%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
+    ["assignment_list_let"] = "let%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
+    ["for_var"] = "for%s*%(var%s+(([^)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
+    ["for_const"] = "for%s*%(const%s+(([^)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
+    ["for_let"] = "for%s*%(let%s+([^%)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
+    ["import"] = "import%s+(.*)%sfrom", -- .* for cases like $abc['foo'][] = 8;
   }
   local result = {}
   local seen = {}
@@ -51,6 +52,7 @@ function M:find_keywords(codeLines)
     -- for i = 1, #codeLines1, 1 do
     local line = codeLines[i]
     for patternDesc, pattern in pairs(patterns) do
+      print(line)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
