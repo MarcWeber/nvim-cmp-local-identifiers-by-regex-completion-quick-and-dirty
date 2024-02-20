@@ -1,3 +1,7 @@
+-- TODO:
+-- in use() add &$ not $
+-- in [] allow $foo to be completed to 'foo' => $foo (TS style)
+-- use treesitter ?
 local M = {}
 function M:is_available()
   return vim.bo.filetype == "php"
@@ -31,15 +35,15 @@ function M:find_keywords(codeLines)
     ["trait"] = "trait%s+([%w_]+)",
     ["class"] = "class%s+([%w_]+)",
     ["var_assignment"] = "($[%w_]+)%[.*=", -- .* for cases like $abc['foo'][] = 8;
-    ["expr_assignment"] = "($[%w_]+)%s+= ", -- if ($x = true){.. x is defined)
+    ["expr_assignment"] = "($[%w_]+)%s*= ", -- if ($x = true){.. x is defined)
     ["global"] = "global ([^;]+)",
     ["static_var"] = "static ($[%w_]+)",
     ["in_list"] = "list%(([^)]+)%)",
     ["foreachkv"] = "as%s+($[%w_]+)%s+=>%s+($[%w_]+)",
     ["foreachv"] = "as%s+($[%w_]+)",
-    ["function_name"] = "function%s+([%w_.]+)%s*%(",
     ["function_and_args"] = "function%s+[%w_.]+%s*%(([^)]+)%)", -- args more important than function name cause you're more likely to use arguments than the name within the function
     ["function_no_name_args"] = "function%s*%(([^)]+)%)",
+    ["function_name"] = "function%s+([%w_.]+)%s*%(",
     ["constructor_args"] = "__construct%s*%(([^)]+)%)",
     ["fn"] = "fn%((%$[%w_]+)%)",
     ["use"] = "use%(([^)]+)%)",
@@ -52,7 +56,7 @@ function M:find_keywords(codeLines)
   local function add(i, sub, line)
     if not seen[i] then
       seen[i] = true
-      table.insert(result, { textEditText = i,  cmp = { kind_text ="php_local_keyword " .. line }, label = string.sub(i, sub,  999) })
+      table.insert(result, { qdline = line, textEditText = i,  cmp = { kind_text ="php_local_keyword " .. line }, label = string.sub(i, sub,  999)})
     end
   end
   for i = #codeLines, 1, -1 do

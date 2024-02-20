@@ -58,7 +58,7 @@ function M:find_keywords(codeLines)
   local function add(m, label, i)
     if not seen[m] then
       seen[m] = true
-      table.insert(result, { insertText = m, textEditText = m,  kind="ruby_local_keyword " .. i, label = label })
+      table.insert(result, { qdline = line, insertText = m, textEditText = m,  kind="ruby_local_keyword " .. i, label = label })
     end
   end
   for i = #codeLines, 1, -1 do

@@ -33,7 +33,7 @@ function M:find_keywords(codeLines)
           for m in string.gmatch(match, "[^ ,]+") do
             if not seen[m] then
               seen[m] = true
-              table.insert(result, { textEditText = m,  cmp = { kind_text ="python_local_keyword " .. i }, label = string.sub(m, 1, 999) })
+              table.insert(result, { qdline = line, textEditText = m,  cmp = { kind_text ="python_local_keyword " .. i }, label = string.sub(m, 1, 999) })
             end
           end
         end

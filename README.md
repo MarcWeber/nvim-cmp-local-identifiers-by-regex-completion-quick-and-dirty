@@ -41,8 +41,9 @@ cmp.setup({
   },
   sorting = {
     comparators = {
+      require 'cmp-qad-compare'
       -- important to preserver order for same score eg local ..
-      compare.score,
+      -- compare.score,
     }
   },
   sources = sources
@@ -67,6 +68,10 @@ Ues treesitter instead?
   See https://github.com/ray-x/cmp-treesitter/issues/14
   Preserving order is missing to get same usefulness
 
+
+Treesitter based completions
+============================
+Eg continue within while / repeat and if () .. condition ?
 
 Eventually use parser rather than regex cause they are ery limited in lua (yet
 seems to get the job done reasonably well to be useful for the languages above)

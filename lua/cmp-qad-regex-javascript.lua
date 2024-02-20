@@ -59,7 +59,7 @@ function M:find_keywords(codeLines)
 
             if not seen[m] and not (m == "=>" ) and not (m == "as") and not (m == "*") then
               seen[m] = true
-              table.insert(result, { textEditText = m, cmp = { kind_text="javascript_local_keyword " .. i }, label = string.sub(m, 1, 999) })
+              table.insert(result, { qdline = line, textEditText = m, cmp = { kind_text="javascript_local_keyword " .. i }, label = string.sub(m, 1, 999) })
             end
           end
         end
