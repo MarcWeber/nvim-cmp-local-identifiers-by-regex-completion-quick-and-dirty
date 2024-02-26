@@ -31,7 +31,7 @@ function M:find_keywords(codeLines)
           for m in string.gmatch(match, "[^ ,]+") do
             if not seen[m] then
               seen[m] = true
-              table.insert(result, { qdline = line, textEditText = m, cmp = { kind_text ="lua_local_keyword " .. i }, label = string.sub(m, 1, 999), priority = i })
+              table.insert(result, { qdline = i, textEditText = m, cmp = { kind_text ="lua_local_keyword " .. i }, label = string.sub(m, 1, 999), priority = i })
             end
           end
         end
