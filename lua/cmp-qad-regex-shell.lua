@@ -35,12 +35,13 @@ function M:find_keywords(codeLines)
         table.insert(result, { qdline = i, textEditText = m, cmp = { kind_text = "typescript_local_keyword" .. i }, label = string.sub(m, 1, 999) })
       end
       local add = function (m)
-        if dp then
-          print("ifdp " .. m)
-          addp("\"$" .. m .. "\"") -- not within strings
-          addp("${" .. m .. "}")
-          addp("$" .. m)
-        end
+        -- ${ABC:-X} "${ABC}" etc are snippets ?
+        -- if dp then
+        --   print("ifdp " .. m)
+        --   addp("\"$" .. m .. "\"") -- not within strings
+        --   addp("${" .. m .. "}")
+        --   addp("$" .. m)
+        -- end
         addp(m)
       end
       local matches = { line:match(pattern) }
