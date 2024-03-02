@@ -26,30 +26,30 @@ M.expected = { }
 
 function M:find_keywords(codeLines)
   local patterns = {
-    ["assignment_keyword_const"] = "const%s+([%w_]+)%s+=", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_keyword_var"] = "var%s+([%w_]+)%s+=", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_keyword_let"] = "let%s+([%w_]+)%s+=", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_list_const"] = "const%s+%[([^%]]+)%]", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_list_var"] = "var%s+%[([^%]]+)%]", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_list_let"] = "let%s+%[([^%]]+)%]", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_dict_const"] = "const%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_dict_var"] = "var%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
-    ["type"] = "type%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_dict_let"] = "let%s+{([^}]+)}", -- .* for cases like $abc['foo'][] = 8;
-    ["lambda_args"] = "%([^%)]+%)%s*=>", -- .* for cases like $abc['foo'][] = 8;
-    ["function_args"] = "function%([^%)]+%)", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_list_const"] = "const%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_list_var"] = "var%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    ["assignment_list_let"] = "let%s+([%w_]+)", -- .* for cases like $abc['foo'][] = 8;
-    ["for_var"] = "for%s*%(var%s+(([^)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
-    ["for_const"] = "for%s*%(const%s+(([^)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
-    ["for_let"] = "for%s*%(let%s+([^%)%]}]+)%)", -- .* for cases like $abc['foo'][] = 8;
-    ["import"] = "import%s+(.*)%sfrom", -- .* for cases like $abc['foo'][] = 8;
+    ["assignment_keyword_const"] = "const%s+([%w_]+)%s+=",
+    ["assignment_keyword_var"] = "var%s+([%w_]+)%s+=",
+    ["assignment_keyword_let"] = "let%s+([%w_]+)%s+=",
+    ["assignment_list_const"] = "const%s+%[([^%]]+)%]",
+    ["assignment_list_var"] = "var%s+%[([^%]]+)%]",
+    ["assignment_list_let"] = "let%s+%[([^%]]+)%]",
+    ["assignment_dict_const"] = "const%s+{([^}]+)}",
+    ["assignment_dict_var"] = "var%s+{([^}]+)}",
+    ["type"] = "type%s+([%w_]+)",
+    ["assignment_dict_let"] = "let%s+{([^}]+)}",
+    ["lambda_args"] = "%([^%)]+%)%s*=>",
+    ["function_args"] = "function%([^%)]+%)",
+    ["assignment_list_const"] = "const%s+([%w_]+)",
+    ["assignment_list_var"] = "var%s+([%w_]+)",
+    ["assignment_list_let"] = "let%s+([%w_]+)",
+    ["for_var"] = "for%s*%(var%s+(([^)%]}]+)%)",
+    ["for_const"] = "for%s*%(const%s+([^)%]}]+)%)",
+    ["for_let"] = "for%s*%(let%s+([^%)%]}]+)%)",
+    ["import"] = "import%s+(.*)%sfrom",
   }
   local result = {}
   local seen = {}
   for i = #codeLines, 1, -1 do
-    -- for i = 1, #codeLines1, 1 do
+   
     local line = codeLines[i]
     for patternDesc, pattern in pairs(patterns) do
       local matches = { line:match(pattern) }

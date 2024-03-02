@@ -18,7 +18,7 @@ Example usage:
 local sources = {}
 
 -- register sources you want
-local qd_langs = {"lua", "python", "ruby", "vim", "php", "javascript", "typescript"}
+local qd_langs = {"lua", "python", "ruby", "vim", "php", "javascript", "typescript", "shell"}
 for i, v in ipairs(qd_langs) do
    require('cmp').register_source(v .. '_local_keywords', require('cmp-qad-regex-' ..  v))
    -- using high priority
