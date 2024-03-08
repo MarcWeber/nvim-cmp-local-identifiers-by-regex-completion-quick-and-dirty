@@ -41,7 +41,7 @@ cmp.setup({
   },
   sorting = {
     comparators = {
-      require 'cmp-qad-compare'
+      require 'cmp-qad-util'.compare_by_line
       -- important to preserver order for same score eg local ..
       -- compare.score,
     }
@@ -67,6 +67,10 @@ Ues treesitter instead?
   Eg see https://github.com/ray-x/cmp-treesitter
   See https://github.com/ray-x/cmp-treesitter/issues/14
   Preserving order is missing to get same usefulness
+
+    ;h lua-treesitter-query
+    PHP -> find arrayso array( and [
+    Python -> find dictionaries {'abc' => ..}
 
 
 Treesitter based completions

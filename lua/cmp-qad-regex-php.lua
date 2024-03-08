@@ -30,6 +30,8 @@ M.test_doc = [[
 ]]
 M.expected = { }
 function M:find_keywords(codeLines)
+  local ts_type = require'cmp-qad-util'.treesitter_type()
+  local in_array = ts_type == "array_creation_expression"
 
   local patterns = {
     ["trait"] = "trait%s+([%w_]+)",
@@ -53,6 +55,7 @@ function M:find_keywords(codeLines)
   }
   local result = {}
   local seen = {}
+
   local function add(i, sub, line)
     if not seen[i] then
       seen[i] = true
@@ -70,6 +73,11 @@ function M:find_keywords(codeLines)
             if string.sub(m, 1, 1) == '&' then
               m = string.sub(m, 2)
             end
+
+            if string.sub(m, 1, 1) == '$' then
+              add("'" ..  string.sub(m, 2) .. "' => " .. m .. ',', 0, 1)
+            end
+
             if string.sub(m, 1, 3) == '...' then -- ...$args case
               add(string.sub(m, 4), 1, i)
               add(m, 0, i)

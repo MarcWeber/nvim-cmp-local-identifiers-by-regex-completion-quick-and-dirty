@@ -1,7 +1,6 @@
 local M = {}
 function M:is_available()
   local f = vim.bo.filetype
-  print(f .. " f ")
   return (f == "zsh") or (f == "sh")
 end
 function M:get_keyword_pattern()
@@ -30,7 +29,6 @@ function M:find_keywords(codeLines)
     local line = codeLines[i]
     for patternDesc, pattern in pairs(patterns) do
       local dp = patternDesc:match("env_assignment")
-      print(dp)
       local addp = function(m)
         table.insert(result, { qdline = i, textEditText = m, cmp = { kind_text = "typescript_local_keyword" .. i }, label = string.sub(m, 1, 999) })
       end

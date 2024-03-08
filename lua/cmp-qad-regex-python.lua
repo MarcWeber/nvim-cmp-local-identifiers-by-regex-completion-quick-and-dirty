@@ -15,6 +15,10 @@ M.test_doc = [[
 M.expected = { }
 
 function M:find_keywords(codeLines)
+  local ts_type = require'cmp-qad-util'.treesitter_type()
+  -- { z } is treated as set, not as dictionary :-(
+  local in_dictionary = ts_type == "dictionary" or ts_type == "set"
+
   local patterns = {
     ["for_x_in"] = "for%s+([%w_,%s]+)%s+in", -- .* for cases like $abc['foo'][] = 8;
     ["assignment"] = "([%w_,%s]+)=%s*",
@@ -26,6 +30,11 @@ function M:find_keywords(codeLines)
   for i = #codeLines, 1, -1 do
     -- for i = 1, #codeLines1, 1 do
     local line = codeLines[i]
+
+    local function add(s)
+      table.insert(result, { qdline = i, textEditText = s,  cmp = { kind_text ="python_local_keyword " .. i }, label = s})
+    end
+
     for patternDesc, pattern in pairs(patterns) do
       local matches = { line:match(pattern) }
       if #matches > 0 then
@@ -33,7 +42,11 @@ function M:find_keywords(codeLines)
           for m in string.gmatch(match, "[^ ,]+") do
             if not seen[m] then
               seen[m] = true
-              table.insert(result, { qdline = i, textEditText = m,  cmp = { kind_text ="python_local_keyword " .. i }, label = string.sub(m, 1, 999) })
+              add(m)
+              print(ts_type)
+              if in_dictionary then
+                add("'" .. m .. "' : " .. m .. ',')
+              end
             end
           end
         end
