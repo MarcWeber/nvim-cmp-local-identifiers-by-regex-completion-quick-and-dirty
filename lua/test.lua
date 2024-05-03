@@ -2,7 +2,8 @@
 -- local qd_langs = {"lua", "python", "ruby", "vim", "php", "javascript", "typescript"}
 -- local qd_langs = {"python"}
 -- local qd_langs = {"javascript"}
-local qd_langs = {"php"}
+-- local qd_langs = {"php"}
+local qd_langs = {"typescript"}
 
 local function iterator_to_array(...)
   local arr = {}
@@ -54,10 +55,13 @@ for i,v in ipairs(qd_langs) do
   local m = require('cmp-qad-regex-' .. v)
 
   local found = {}
-  local lines = iterator_to_array(string.gmatch(m.test_doc, "[^\n]+"))
-  for _, v in ipairs(m:find_keywords(lines)) do
+  local lines = iterator_to_array(string.gmatch(m.test.doc, "[^\n]+"))
+  for _, v in ipairs(m:find_keywords(lines, m.test.word_before_cursor)) do
     table.insert(found, {v.insertText, v.label} )
   end
+
+  print(vim.inspect(found))
+  
   if not (serialize(found) == serialize(m.expected)) then
     print("FAILED: " .. v)
     print("expected")

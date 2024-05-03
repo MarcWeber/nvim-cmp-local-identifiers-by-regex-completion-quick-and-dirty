@@ -43,7 +43,6 @@ function M:find_keywords(codeLines)
             if not seen[m] then
               seen[m] = true
               add(m)
-              print(ts_type)
               if in_dictionary then
                 add("'" .. m .. "' : " .. m .. ',')
               end
