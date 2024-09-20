@@ -17,6 +17,7 @@ M.test = {
   (N9) => ..
   (N10: Array<Number>) => ..
   function(N17: Array<Number>) => ..
+  function(N18){}
   for (let N11 of [2])
   for (let N12 in {"a": 20})
   import {N15,N16} from ..
@@ -42,7 +43,7 @@ function M:find_keywords(codeLines, word_before_cursor)
     ["type"] = "type%s+([%w_]+)",
     ["assignment_dict_let"] = "let%s+{([^}]+)}",
     ["lambda_args"] = "%([^%)]+%)%s*=>",
-    ["function_args"] = "function%([^%)]+%)",
+    ["function_args"] = "function%s*%(([^%)]+)%)",
     ["assignment_list_const"] = "const%s+([%w_]+)",
     ["assignment_list_var"] = "var%s+([%w_]+)",
     ["assignment_list_let"] = "let%s+([%w_]+)",
@@ -78,11 +79,6 @@ function M:complete(params, callback)
   lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
   local before_cursor = string.sub(lines[#lines], 1, col)
   local word_before_cursor = before_cursor:match("%w+$")
-  print(vim.inspect({
-    before_cursor,
-    word_before_cursor
-  }))
-
   found = M:find_keywords(lines, word_before_cursor)
   callback(found)
 end
