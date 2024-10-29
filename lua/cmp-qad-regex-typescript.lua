@@ -25,6 +25,8 @@ M.test = {
   import * as N14 from ..
   for (let command of dwc.commands) {
   for (let command of A) {
+
+  for (var ixx = 0; ixx < count ; ixx++) {
 ]]
 }
 
@@ -47,7 +49,7 @@ function M:find_keywords(codeLines, word_before_cursor)
     ["assignment_list_const"] = "const%s+([%w_]+)",
     ["assignment_list_var"] = "var%s+([%w_]+)",
     ["assignment_list_let"] = "let%s+([%w_]+)",
-    ["for_var"] = "for%s*%(var%s+(([^)%]}]+)%)",
+    ["for_var"] = "for%s*%(var%s+([^)%]}]+)%)",
     ["for_const"] = "for%s*%(const%s+([^)%]}]+)%)",
     ["for_let"] = "for%s*%(let%s+([^%)%]}]+)%)",
     ["import"] = "import%s+(.*)%sfrom",
