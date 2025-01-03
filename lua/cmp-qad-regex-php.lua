@@ -80,7 +80,8 @@ function M:find_keywords(codeLines)
 
             if string.sub(m, 1, 3) == '...' then -- ...$args case
               add(string.sub(m, 4), 1, i)
-              add(m, 0, i)
+              -- add(m, 0, i)
+              add(m, 0, 99999) -- force this to be first because if you use ...$args its likely that you need ...$args again
             else
               add(m, 1, i)
             end
