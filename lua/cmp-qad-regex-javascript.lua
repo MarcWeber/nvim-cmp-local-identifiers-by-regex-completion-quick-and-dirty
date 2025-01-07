@@ -26,9 +26,9 @@ M.expected = { }
 
 function M:find_keywords(codeLines)
   local patterns = {
-    ["assignment_keyword_const"] = "const%s+([%w_]+)%s+=",
-    ["assignment_keyword_var"] = "var%s+([%w_]+)%s+=",
-    ["assignment_keyword_let"] = "let%s+([%w_]+)%s+=",
+    ["assignment_keyword_const"] = "const%s+([%w_$]+)%s+=",
+    ["assignment_keyword_var"] = "var%s+([%w_$]+)%s+=",
+    ["assignment_keyword_let"] = "let%s+([%w_$]+)%s+=",
     ["assignment_list_const"] = "const%s+%[([^%]]+)%]",
     ["assignment_list_var"] = "var%s+%[([^%]]+)%]",
     ["assignment_list_let"] = "let%s+%[([^%]]+)%]",
@@ -37,9 +37,9 @@ function M:find_keywords(codeLines)
     ["assignment_dict_let"] = "let%s+{([^}]+)}",
     ["lambda_args"] = "%([^%)]+%)%s*=>",
     ["function_args"] = "function%([^%)]+%)",
-    ["assignment_list_const"] = "const%s+([%w_]+)",
-    ["assignment_list_var"] = "var%s+([%w_]+)",
-    ["assignment_list_let"] = "let%s+([%w_]+)",
+    ["assignment_list_const"] = "const%s+([%w_$]+)",
+    ["assignment_list_var"] = "var%s+([%w_$]+)",
+    ["assignment_list_let"] = "let%s+([%w_$]+)",
     ["for_var"] = "for%s*%(var%s+(([^)%]}]+)%)",
     ["for_const"] = "for%s*%(const%s+(([^)%]}]+)%)",
     ["for_let"] = "for%s*%(let%s+([^)%]}]+)%)",
@@ -54,6 +54,7 @@ function M:find_keywords(codeLines)
       local matches = { line:match(pattern) }
       if #matches > 0 then
         for _, match in ipairs(matches) do
+          print(vim.inspect({patternDesc, pattern, match}))
           for m in string.gmatch(match, "[^ ,]+") do
             m = string.gsub(m, "[({}):]", "")
 
