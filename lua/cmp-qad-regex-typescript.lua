@@ -45,7 +45,7 @@ function M:find_keywords(codeLines, word_before_cursor)
     ["type"] = "type%s+([%w_$]+)",
     ["assignment_dict_let"] = "let%s+{([^}]+)}",
     ["lambda_args"] = "%([^%)]+%)%s*=>",
-    ["function_args"] = "function%s*%(([^%)]+)%)",
+    ["function_args"] = "function%(([^%)]+)%)",
     ["assignment_list_const"] = "const%s+([%w_$]+)",
     ["assignment_list_var"] = "var%s+([%w_$]+)",
     ["assignment_list_let"] = "let%s+([%w_$]+)",
