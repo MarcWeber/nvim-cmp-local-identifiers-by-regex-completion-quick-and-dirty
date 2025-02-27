@@ -34,12 +34,13 @@ function M:find_keywords(codeLines)
       end
       local add = function (m)
         -- ${ABC:-X} "${ABC}" etc are snippets ?
-        -- if dp then
+        if dp then
         --   print("ifdp " .. m)
         --   addp("\"$" .. m .. "\"") -- not within strings
-        --   addp("${" .. m .. "}")
+             addp("${" .. m .. "}")
+             addp("\"${" .. m .. "}\"")
         --   addp("$" .. m)
-        -- end
+        end
         addp(m)
       end
       local matches = { line:match(pattern) }

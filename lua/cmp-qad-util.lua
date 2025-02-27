@@ -10,7 +10,7 @@ function M.compare_by_line (entry1, entry2)
   return nil
 end
 
-M.qd_langs = {"lua", "python", "ruby", "vim", "php", "javascript", "typescript", "shell", "haskell"}
+M.qd_langs = {"lua", "python", "ruby", "vim", "php", "javascript", "typescript", "shell", "haskell", "nix"}
 
 function M.treesitter_type()
   -- lua print(vim.inspect(require'cmp-qad-util'.treesitter_type()))
