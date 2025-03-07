@@ -3,7 +3,8 @@
 -- local qd_langs = {"python"}
 -- local qd_langs = {"javascript"}
 -- local qd_langs = {"php"}
-local qd_langs = {"typescript"}
+-- local qd_langs = {"typescript"}
+local qd_langs = {"go"}
 
 local function iterator_to_array(...)
   local arr = {}
