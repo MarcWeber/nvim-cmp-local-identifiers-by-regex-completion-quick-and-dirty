@@ -1,3 +1,5 @@
+-- TODO: 
+--       def inode_to_path(self, inode: InodeT) -> str:
 local M = {}
 function M:is_available()
   return vim.bo.filetype == "python"
