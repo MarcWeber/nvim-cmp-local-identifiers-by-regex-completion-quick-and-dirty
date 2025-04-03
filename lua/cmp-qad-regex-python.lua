@@ -13,6 +13,9 @@ M.test_doc = [[
   ccc, ddd = zooor
   for aaa, bbb in zoo:
   class SimpleKeyValueStoragePickle:
+
+  def gui(app_state: AppState):
+      for w in app_state.windows:
 ]]
 M.expected = { }
 
@@ -24,7 +27,7 @@ function M:find_keywords(codeLines)
   local patterns = {
     ["for_x_in"] = "for%s+([%w_,%s]+)%s+in", -- .* for cases like $abc['foo'][] = 8;
     ["assignment"] = "([%w_,%s]+)=%s*",
-    ["def"] = "def%s+([%w_]+)%(([%w_,%s]+)%)",
+    ["def"] = "def%s+([%w_]+)%(([%w_,:%s]+)%)",
     ["class"] = "class%s+([%w_]+)",
   }
   local result = {}
@@ -42,6 +45,7 @@ function M:find_keywords(codeLines)
       if #matches > 0 then
         for _, match in ipairs(matches) do
           for m in string.gmatch(match, "[^ ,]+") do
+            m = string.gsub(m, "[:]", "")
             if not seen[m] then
               seen[m] = true
               add(m)
