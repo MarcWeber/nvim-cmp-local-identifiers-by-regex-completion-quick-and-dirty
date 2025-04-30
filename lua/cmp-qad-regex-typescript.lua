@@ -57,7 +57,6 @@ function M:find_keywords(codeLines, word_before_cursor)
   local result = {}
   local seen = {}
   for i = #codeLines, 1, -1 do
-   
     local line = codeLines[i]
     for patternDesc, pattern in pairs(patterns) do
       local matches = { line:match(pattern) }
@@ -65,7 +64,7 @@ function M:find_keywords(codeLines, word_before_cursor)
         for _, match in ipairs(matches) do
           for m in string.gmatch(match, "[^ ,]+") do
             m = string.gsub(m, "[({}):]", "")
-            if not seen[m] and not (m == "=>" ) and not (m == "as") and not (m == "*") and not (m == "of" and patternDesc == "for_let") and not (m == word_before_cursor) then
+            if not seen[m] and not (m == "=>" ) and not (m == "as") and not (m == "*") and not (m == "of" and patternDesc == "for_let") and not (i == #codeLines and m == word_before_cursor) then
               seen[m] = true
               table.insert(result, { qdline = i, textEditText = m, cmp = { kind_text = "typescript_local_keyword" .. i }, label = string.sub(m, 1, 999) })
             end
@@ -77,11 +76,16 @@ function M:find_keywords(codeLines, word_before_cursor)
   return result
 end
 function M:complete(params, callback)
-  line = params.context.cursor.line
-  lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
+  local line = params.context.cursor.line
+  local lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
+
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local line = cursor[1] - 1
+  local col = cursor[2]
   local before_cursor = string.sub(lines[#lines], 1, col)
   local word_before_cursor = before_cursor:match("%w+$")
-  found = M:find_keywords(lines, word_before_cursor)
+
+  local found = M:find_keywords(lines, word_before_cursor)
   callback(found)
 end
 

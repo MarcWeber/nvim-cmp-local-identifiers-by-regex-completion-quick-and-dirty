@@ -24,7 +24,7 @@ M.test_doc = [[
 ]]
 M.expected = { }
 
-function M:find_keywords(codeLines)
+function M:find_keywords(codeLines, word_before_cursor)
   local patterns = {
     ["assignment_keyword_const"] = "const%s+([%w_$]+)%s+=",
     ["assignment_keyword_var"] = "var%s+([%w_$]+)%s+=",
@@ -57,7 +57,7 @@ function M:find_keywords(codeLines)
           for m in string.gmatch(match, "[^ ,]+") do
             m = string.gsub(m, "[({}):]", "")
 
-            if not seen[m] and not (m == "=>" ) and not (m == "as") and not (m == "*") then
+            if not seen[m] and not (m == "=>" ) and not (m == "as") and not (m == "*") and not (i == #codeLines and m == word_before_cursor) then
               seen[m] = true
               table.insert(result, { qdline = i, textEditText = m, cmp = { kind_text="javascript_local_keyword " .. i }, label = string.sub(m, 1, 999) })
             end
@@ -69,9 +69,16 @@ function M:find_keywords(codeLines)
   return result
 end
 function M:complete(params, callback)
-  line = params.context.cursor.line
-  lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  found = M:find_keywords(lines)
+  local line = params.context.cursor.line
+  local lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
+
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local line = cursor[1] - 1
+  local col = cursor[2]
+  local before_cursor = string.sub(lines[#lines], 1, col)
+  local word_before_cursor = before_cursor:match("%w+$")
+
+  local found = M:find_keywords(lines, word_before_cursor)
   callback(found)
 end
 return M

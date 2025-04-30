@@ -25,7 +25,7 @@ func main() {
 }
 ]]
 
-function M:find_keywords(codeLines)
+function M:find_keywords(codeLines, word_before_cursor)
   local patterns = {
     ["var"] = "var%s+([%w_]+)",         -- var declarations
     ["short_var"] = "([%w_]+)%s*:=",    -- short variable declarations
@@ -42,7 +42,7 @@ function M:find_keywords(codeLines)
     for _, pattern in pairs(patterns) do
       for match in line:gmatch(pattern) do
         for m in match:gmatch("[^ ,]+") do
-          if not seen[m] then
+          if not seen[m] and not (i == #codeLines and m == word_before_cursor) then
             seen[m] = true
             table.insert(result, {
               qdline = i,
@@ -61,7 +61,14 @@ end
 function M:complete(params, callback)
   local line = params.context.cursor.line
   local lines = vim.api.nvim_buf_get_lines(0, 0, line + 1, 0)
-  local found = M:find_keywords(lines)
+
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local line = cursor[1] - 1
+  local col = cursor[2]
+  local before_cursor = string.sub(lines[#lines], 1, col)
+  local word_before_cursor = before_cursor:match("%w+$")
+
+  local found = M:find_keywords(lines, word_before_cursor)
   callback(found)
 end
 
